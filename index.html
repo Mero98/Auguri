@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorpresa per Te ❤️</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; text-align: center; background-color: #fff0f3; padding: 40px; color: #444; }
+        .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: inline-block; max-width: 450px; width: 90%; border: 2px solid #ffccd5; }
+        h2 { color: #ff4d6d; margin-bottom: 20px; font-size: 22px; min-height: 60px; }
+        input { padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 2px solid #ffccd5; width: 70%; outline: none; text-align: center; font-size: 16px; }
+        button { background-color: #ff4d6d; color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #ff758f; transform: scale(1.05); }
+        #feedback { margin-top: 15px; font-weight: bold; color: #ff4d6d; min-height: 24px; font-style: italic; }
+        #photo-container { display: none; margin-top: 20px; animation: fadeIn 2s; }
+        #photo { width: 100%; border-radius: 15px; border: 5px solid #ffccd5; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 id="question-text">Ti ha colpito questo tipo di biglietto?</h2>
+    
+    <div id="quiz-section">
+        <input type="text" id="answer-input" placeholder="Si o No?">
+        <br>
+        <button onclick="checkAnswer()">Rispondi</button>
+    </div>
+
+    <p id="feedback"></p>
+
+    <div id="photo-container">
+        <img id="photo" src="noi.jpg" alt="Noi due">
+        <h3 style="color: #ff4d6d; margin-top: 15px;">Tanti Auguri Amore Mio! ❤️</h3>
+    </div>
+</div>
+
+<script>
+    let step = 0;
+    const questions = [
+        "Ti ha colpito questo tipo di biglietto?",
+        "Ti sta piacendo la serata?",
+        "La stai passando con le persone a cui più tieni?"
+    ];
+
+    function checkAnswer() {
+        let inputField = document.getElementById("answer-input");
+        let input = inputField.value.toLowerCase().trim();
+        let feedback = document.getElementById("feedback");
+        let questionText = document.getElementById("question-text");
+
+        if (input === "si") {
+            step++;
+            feedback.innerText = "Ottima risposta! 😉";
+            inputField.value = "";
+            
+            if (step < questions.length) {
+                // Passa alla prossima domanda
+                questionText.innerText = questions[step];
+            } else {
+                // Fine del quiz: mostra la foto
+                document.getElementById("quiz-section").style.display = "none";
+                questionText.innerText = "Sapevo che avresti risposto SI!";
+                document.getElementById("photo-container").style.display = "block";
+                feedback.innerText = "Ti amo da impazzire!";
+            }
+        } else if (input === "no") {
+            feedback.innerText = "Dai svegliati rispondi si oppure niente regalo";
+            inputField.value = "";
+        } else {
+            feedback.innerText = "Devi scrivere 'Si' oppure 'No'!";
+        }
+    }
+
+    // Permette di premere "Invio" sulla tastiera per rispondere
+    document.getElementById("answer-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            checkAnswer();
+        }
+    });
+</script>
+
+</body>
+</html>
