@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorpresa per Te ❤️</title>
+    <title>Per Te ❤️</title>
     <style>
-        body { font-family: 'Arial', sans-serif; text-align: center; background-color: #fff0f3; padding: 40px; color: #444; }
-        .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: inline-block; max-width: 450px; width: 90%; border: 2px solid #ffccd5; }
-        h2 { color: #ff4d6d; margin-bottom: 20px; font-size: 22px; min-height: 60px; }
-        input { padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 2px solid #ffccd5; width: 70%; outline: none; text-align: center; font-size: 16px; }
-        button { background-color: #ff4d6d; color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
-        button:hover { background-color: #ff758f; transform: scale(1.05); }
-        #feedback { margin-top: 15px; font-weight: bold; color: #ff4d6d; min-height: 24px; font-style: italic; }
+        /* Sfondo Azzurro Pastello */
+        body { font-family: 'Arial', sans-serif; text-align: center; background-color: #e3f2fd; padding: 40px; color: #444; overflow-x: hidden; }
+        .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: inline-block; max-width: 450px; width: 90%; border: 2px solid #bbdefb; position: relative; z-index: 10; }
+        h2 { color: #1976d2; margin-bottom: 20px; font-size: 20px; min-height: 80px; line-height: 1.5; display: flex; align-items: center; justify-content: center; }
+        input { padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 2px solid #bbdefb; width: 70%; outline: none; text-align: center; font-size: 16px; }
+        button { background-color: #42a5f5; color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #1e88e5; transform: scale(1.05); }
+        #feedback { margin-top: 15px; font-weight: bold; color: #1e88e5; min-height: 24px; font-style: italic; }
         #photo-container { display: none; margin-top: 20px; animation: fadeIn 2s; }
-        #photo { width: 100%; border-radius: 15px; border: 5px solid #ffccd5; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        #photo { width: 100%; border-radius: 15px; border: 5px solid #bbdefb; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
+        /* Animazione Cuori */
+        .heart { position: fixed; color: #ff4d6d; font-size: 20px; z-index: 1; pointer-events: none; animation: fall linear forwards; top: -20px; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2 id="question-text">Ti ha colpito questo tipo di biglietto?</h2>
+    <h2 id="question-text">Pensi che mi sarei mai dimenticato che a mezzanotte scatta il tuo giorno?</h2>
     
     <div id="quiz-section">
         <input type="text" id="answer-input" placeholder="Si o No?">
@@ -32,16 +37,25 @@
 
     <div id="photo-container">
         <img id="photo" src="noi.jpg" alt="Noi due">
-        <h3 style="color: #ff4d6d; margin-top: 15px;">Tanti Auguri Amore Mio! ❤️</h3>
+        <h3 style="color: #1976d2; margin-top: 15px;">Corri giù, ti aspetto! 💐</h3>
     </div>
 </div>
 
 <script>
     let step = 0;
+    
+    // Domande aggiornate (senza la prima)
     const questions = [
-        "Ti ha colpito questo tipo di biglietto?",
-        "Ti sta piacendo la serata?",
-        "La stai passando con le persone a cui più tieni?"
+        "Pensi che mi sarei mai dimenticato che a mezzanotte scatta il tuo giorno?",
+        "Ti va di iniziare il tuo compleanno con un sorriso?",
+        "Se ti dicessi che fuori dal portone c'è un motivo per scendere, verresti a vedere?"
+    ];
+
+    // Messaggi di feedback
+    const feedbacks = [
+        "Esatto! E non potevo certo lasciarti sola in questo momento...",
+        "Speravo dicessi di sì... ho pensato a una piccola sorpresa per te.",
+        "Allora corri giù! Ti aspetto qui sotto! ❤️"
     ];
 
     function checkAnswer() {
@@ -51,29 +65,42 @@
         let questionText = document.getElementById("question-text");
 
         if (input === "si") {
+            feedback.innerText = feedbacks[step];
             step++;
-            feedback.innerText = "Ottima risposta! 😉";
             inputField.value = "";
             
-            if (step < questions.length) {
-                // Passa alla prossima domanda
-                questionText.innerText = questions[step];
-            } else {
-                // Fine del quiz: mostra la foto
-                document.getElementById("quiz-section").style.display = "none";
-                questionText.innerText = "Sapevo che avresti risposto SI!";
-                document.getElementById("photo-container").style.display = "block";
-                feedback.innerText = "Ti amo da impazzire!";
-            }
+            setTimeout(() => {
+                if (step < questions.length) {
+                    questionText.innerText = questions[step];
+                    feedback.innerText = "";
+                } else {
+                    document.getElementById("quiz-section").style.display = "none";
+                    questionText.innerText = "Ti aspetto qui fuori!";
+                    document.getElementById("photo-container").style.display = "block";
+                    startHearts(); 
+                }
+            }, 1500);
+
         } else if (input === "no") {
             feedback.innerText = "Dai svegliati rispondi si oppure niente regalo";
             inputField.value = "";
         } else {
-            feedback.innerText = "Devi scrivere 'Si' oppure 'No'!";
+            feedback.innerText = "Rispondi 'Si' o 'No'...";
         }
     }
 
-    // Permette di premere "Invio" sulla tastiera per rispondere
+    function startHearts() {
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }, 300);
+    }
+
     document.getElementById("answer-input").addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
             checkAnswer();
