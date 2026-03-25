@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Per Te ❤️</title>
     <style>
-        /* Sfondo Azzurro Pastello */
         body { font-family: 'Arial', sans-serif; text-align: center; background-color: #e3f2fd; padding: 40px; color: #444; overflow-x: hidden; }
         .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: inline-block; max-width: 450px; width: 90%; border: 2px solid #bbdefb; position: relative; z-index: 10; }
         h2 { color: #1976d2; margin-bottom: 20px; font-size: 20px; min-height: 80px; line-height: 1.5; display: flex; align-items: center; justify-content: center; }
@@ -15,8 +14,6 @@
         #feedback { margin-top: 15px; font-weight: bold; color: #1e88e5; min-height: 24px; font-style: italic; }
         #photo-container { display: none; margin-top: 20px; animation: fadeIn 2s; }
         #photo { width: 100%; border-radius: 15px; border: 5px solid #bbdefb; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        
-        /* Animazione Cuori */
         .heart { position: fixed; color: #ff4d6d; font-size: 20px; z-index: 1; pointer-events: none; animation: fall linear forwards; top: -20px; }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -44,14 +41,12 @@
 <script>
     let step = 0;
     
-    // Domande aggiornate (senza la prima)
     const questions = [
         "Pensi che mi sarei mai dimenticato che a mezzanotte scatta il tuo giorno?",
         "Ti va di iniziare il tuo compleanno con un sorriso?",
         "Se ti dicessi che fuori dal portone c'è un motivo per scendere, verresti a vedere?"
     ];
 
-    // Messaggi di feedback
     const feedbacks = [
         "Esatto! E non potevo certo lasciarti sola in questo momento...",
         "Speravo dicessi di sì... ho pensato a una piccola sorpresa per te.",
@@ -64,7 +59,29 @@
         let feedback = document.getElementById("feedback");
         let questionText = document.getElementById("question-text");
 
-        if (input === "si") {
+        let isCorrect = false;
+        let errorMsg = "Risposta sbagliata! Guarda che rimango qui fuori con i fiori finché non rispondi bene! 😜";
+
+        // Logica Step 0: Giusta se scrive NO
+        if (step === 0) {
+            if (input === "no") {
+                isCorrect = true;
+            } else if (input === "si") {
+                feedback.innerText = errorMsg;
+                inputField.value = "";
+            }
+        } 
+        // Logica Step 1 e 2: Giusta se scrive SI
+        else {
+            if (input === "si") {
+                isCorrect = true;
+            } else if (input === "no") {
+                feedback.innerText = errorMsg;
+                inputField.value = "";
+            }
+        }
+
+        if (isCorrect) {
             feedback.innerText = feedbacks[step];
             step++;
             inputField.value = "";
@@ -79,12 +96,8 @@
                     document.getElementById("photo-container").style.display = "block";
                     startHearts(); 
                 }
-            }, 1500);
-
-        } else if (input === "no") {
-            feedback.innerText = "Dai svegliati rispondi si oppure niente regalo";
-            inputField.value = "";
-        } else {
+            }, 1800);
+        } else if (input !== "si" && input !== "no" && input !== "") {
             feedback.innerText = "Rispondi 'Si' o 'No'...";
         }
     }
@@ -102,9 +115,7 @@
     }
 
     document.getElementById("answer-input").addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            checkAnswer();
-        }
+        if (event.key === "Enter") checkAnswer();
     });
 </script>
 
