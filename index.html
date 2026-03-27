@@ -7,7 +7,7 @@
     <style>
         body { font-family: 'Arial', sans-serif; text-align: center; background-color: #e3f2fd; padding: 40px; color: #444; overflow-x: hidden; }
         .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: inline-block; max-width: 450px; width: 90%; border: 2px solid #bbdefb; position: relative; z-index: 10; }
-        h2 { color: #1976d2; margin-bottom: 20px; font-size: 20px; min-height: 80px; line-height: 1.5; display: flex; align-items: center; justify-content: center; }
+        h2 { color: #1976d2; margin-bottom: 20px; font-size: 19px; min-height: 90px; line-height: 1.5; display: flex; align-items: center; justify-content: center; }
         input { padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 2px solid #bbdefb; width: 70%; outline: none; text-align: center; font-size: 16px; }
         button { background-color: #42a5f5; color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
         button:hover { background-color: #1e88e5; transform: scale(1.05); }
@@ -22,7 +22,7 @@
 <body>
 
 <div class="card">
-    <h2 id="question-text">Pensi che mi sarei mai dimenticato che a mezzanotte scatta il tuo giorno?</h2>
+    <h2 id="question-text">Ma lo sai che sei proprio una guastafeste a chiedermi di uscire proprio stasera?</h2>
     
     <div id="quiz-section">
         <input type="text" id="answer-input" placeholder="Si o No?">
@@ -34,7 +34,7 @@
 
     <div id="photo-container">
         <img id="photo" src="noi.jpg" alt="Noi due">
-        <h3 style="color: #1976d2; margin-top: 15px;">Corri giù, ti aspetto! 💐</h3>
+        <h3 style="color: #1976d2; margin-top: 15px;">Tanti auguri vita mia! ❤️💐</h3>
     </div>
 </div>
 
@@ -42,15 +42,15 @@
     let step = 0;
     
     const questions = [
-        "Pensi che mi sarei mai dimenticato che a mezzanotte scatta il tuo giorno?",
-        "Ti va di iniziare il tuo compleanno con un sorriso?",
-        "Se ti dicessi che fuori dal portone c'è un motivo per scendere, verresti a vedere?"
+        "Ma lo sai che sei proprio una guastafeste a chiedermi di uscire proprio stasera?",
+        "Lo sai che volevo farti una sorpresa a mezzanotte senza dirti nulla, ma mi hai rovinato il piano?",
+        "Spero che comunque sia stata una bella serata per te (per me lo è stata tantissimo), sei pronta per la sorpresa?"
     ];
 
     const feedbacks = [
-        "Esatto! E non potevo certo lasciarti sola in questo momento...",
-        "Speravo dicessi di sì... ho pensato a una piccola sorpresa per te.",
-        "Allora corri giù! Ti aspetto qui sotto! ❤️"
+        "Esatto! Mi hai distrutto un piano perfetto... 😤",
+        "Ebbene sì, ma ti perdono perché sei tu... ❤️",
+        "" // Vuoto per l'ultimo step così non sovrascrive la sorpresa
     ];
 
     function checkAnswer() {
@@ -59,45 +59,32 @@
         let feedback = document.getElementById("feedback");
         let questionText = document.getElementById("question-text");
 
-        let isCorrect = false;
+        let isCorrect = (input === "si");
         let errorMsg = "Risposta sbagliata! Guarda che rimango qui fuori con i fiori finché non rispondi bene! 😜";
-
-        // Logica Step 0: Giusta se scrive NO
-        if (step === 0) {
-            if (input === "no") {
-                isCorrect = true;
-            } else if (input === "si") {
-                feedback.innerText = errorMsg;
-                inputField.value = "";
-            }
-        } 
-        // Logica Step 1 e 2: Giusta se scrive SI
-        else {
-            if (input === "si") {
-                isCorrect = true;
-            } else if (input === "no") {
-                feedback.innerText = errorMsg;
-                inputField.value = "";
-            }
-        }
 
         if (isCorrect) {
             feedback.innerText = feedbacks[step];
             step++;
             inputField.value = "";
             
-            setTimeout(() => {
-                if (step < questions.length) {
+            if (step < questions.length) {
+                // Se ci sono ancora domande, aspetta un momento e mostra la prossima
+                setTimeout(() => {
                     questionText.innerText = questions[step];
                     feedback.innerText = "";
-                } else {
-                    document.getElementById("quiz-section").style.display = "none";
-                    questionText.innerText = "Ti aspetto qui fuori!";
-                    document.getElementById("photo-container").style.display = "block";
-                    startHearts(); 
-                }
-            }, 1800);
-        } else if (input !== "si" && input !== "no" && input !== "") {
+                }, 1800);
+            } else {
+                // FINE: Mostra subito la foto e i cuori
+                document.getElementById("quiz-section").style.display = "none";
+                document.getElementById("photo-container").style.display = "block";
+                feedback.innerText = ""; 
+                startHearts(); 
+            }
+
+        } else if (input === "no") {
+            feedback.innerText = errorMsg;
+            inputField.value = "";
+        } else if (input !== "") {
             feedback.innerText = "Rispondi 'Si' o 'No'...";
         }
     }
