@@ -44,13 +44,7 @@
     const questions = [
         "Ma lo sai che sei proprio una guastafeste a chiedermi di uscire proprio stasera?",
         "Lo sai che volevo farti una sorpresa a mezzanotte senza dirti nulla, ma mi hai rovinato il piano?",
-        "Spero che comunque sia stata una bella serata per te (per me lo è stata tantissimo), sei pronta per la sorpresa?"
-    ];
-
-    const feedbacks = [
-        "Esatto! Mi hai distrutto un piano perfetto... 😤",
-        "Ebbene sì, ma ti perdono perché sei tu... ❤️",
-        "" // Vuoto per l'ultimo step così non sovrascrive la sorpresa
+        "è stata una bellissima serata penso anche più di quanto sarebbe stata la mia piccola sorpresa, e ora o regaliii (speriamo ti piacciano)"
     ];
 
     function checkAnswer() {
@@ -59,32 +53,56 @@
         let feedback = document.getElementById("feedback");
         let questionText = document.getElementById("question-text");
 
-        let isCorrect = (input === "si");
-        let errorMsg = "Risposta sbagliata! Guarda che rimango qui fuori con i fiori finché non rispondi bene! 😜";
+        let isCorrect = false;
+        let nextFeedback = "";
+        let errorMsg = "Daiii rispondi giusto e non fare la stupidaaa 😜";
+
+        if (step === 0) {
+            // STEP 1: Deve rispondere SI
+            if (input === "si") {
+                isCorrect = true;
+                nextFeedback = "Esatto! Mi hai distrutto un piano perfetto... 😤";
+            } else if (input === "no") {
+                feedback.innerText = errorMsg;
+            }
+        } 
+        else if (step === 1) {
+            // STEP 2: Gestione speciale per SI o NO
+            if (input === "si") {
+                isCorrect = true;
+                nextFeedback = "Ebbene sì, ma ti perdono perché sei tu... ❤️";
+            } else if (input === "no") {
+                isCorrect = true;
+                nextFeedback = "Inutile che neghi! Mi hai proprio anticipato! Ma ti perdono... ❤️";
+            }
+        } 
+        else if (step === 2) {
+            // STEP 3: Deve rispondere SI
+            if (input === "si") {
+                isCorrect = true;
+                nextFeedback = "";
+            } else if (input === "no") {
+                feedback.innerText = errorMsg;
+            }
+        }
 
         if (isCorrect) {
-            feedback.innerText = feedbacks[step];
+            feedback.innerText = nextFeedback;
             step++;
             inputField.value = "";
             
             if (step < questions.length) {
-                // Se ci sono ancora domande, aspetta un momento e mostra la prossima
                 setTimeout(() => {
                     questionText.innerText = questions[step];
                     feedback.innerText = "";
-                }, 1800);
+                }, 2000);
             } else {
-                // FINE: Mostra subito la foto e i cuori
                 document.getElementById("quiz-section").style.display = "none";
                 document.getElementById("photo-container").style.display = "block";
                 feedback.innerText = ""; 
                 startHearts(); 
             }
-
-        } else if (input === "no") {
-            feedback.innerText = errorMsg;
-            inputField.value = "";
-        } else if (input !== "") {
+        } else if (input !== "si" && input !== "no" && input !== "") {
             feedback.innerText = "Rispondi 'Si' o 'No'...";
         }
     }
