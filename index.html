@@ -164,14 +164,13 @@
             step++;
             inputField.value = "";
             
+            // Timer impostato a 6000ms (6 secondi)
             if (step < questions.length) {
-                // Aspetta 4 secondi prima di mostrare la nuova domanda
                 setTimeout(() => {
                     questionText.innerText = questions[step];
                     feedback.innerText = "";
-                }, 4000); 
+                }, 6000); 
             } else {
-                // Mostra subito la sorpresa finale
                 document.getElementById("quiz-section").style.display = "none";
                 document.getElementById("photo-container").style.display = "block";
                 feedback.innerText = ""; 
